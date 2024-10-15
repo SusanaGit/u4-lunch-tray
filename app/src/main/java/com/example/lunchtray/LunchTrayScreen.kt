@@ -140,7 +140,12 @@ fun LunchTrayApp(
             composable(route = LunchTrayScreen.Entree.name) {
                 EntreeMenuScreen(
                     options = DataSource.entreeMenuItems,
-                    onCancelButtonClicked = { /*TODO*/ },
+                    onCancelButtonClicked = {
+                        cancelOrderAndNavigateToStart(
+                            viewModel = viewModel,
+                            navController = navController
+                        )
+                    },
                     onNextButtonClicked = {
                         navController.navigate(LunchTrayScreen.DishMenu.name)
                     },
@@ -154,7 +159,12 @@ fun LunchTrayApp(
             composable(route = LunchTrayScreen.DishMenu.name) {
                 SideDishMenuScreen(
                     options = DataSource.sideDishMenuItems,
-                    onCancelButtonClicked = { /*TODO*/ },
+                    onCancelButtonClicked = {
+                        cancelOrderAndNavigateToStart(
+                            viewModel = viewModel,
+                            navController = navController
+                        )
+                    },
                     onNextButtonClicked = { 
                         navController.navigate(LunchTrayScreen.Accompaniment.name)
                     },
@@ -168,7 +178,12 @@ fun LunchTrayApp(
             composable(route = LunchTrayScreen.Accompaniment.name) {
                 AccompanimentMenuScreen(
                     options = DataSource.accompanimentMenuItems,
-                    onCancelButtonClicked = { /*TODO*/ },
+                    onCancelButtonClicked = {
+                        cancelOrderAndNavigateToStart(
+                            viewModel = viewModel,
+                            navController = navController
+                        )
+                    },
                     onNextButtonClicked = { 
                         navController.navigate(LunchTrayScreen.CheckOut.name)
                     },
@@ -185,7 +200,12 @@ fun LunchTrayApp(
                     onNextButtonClicked = {
                         navController.navigate(LunchTrayScreen.Start.name)
                     },
-                    onCancelButtonClicked = { /*TODO*/ },
+                    onCancelButtonClicked = {
+                        cancelOrderAndNavigateToStart(
+                            viewModel = viewModel,
+                            navController = navController
+                        )
+                    },
                     modifier = Modifier
                         .verticalScroll(rememberScrollState())
                         .padding(
@@ -198,4 +218,12 @@ fun LunchTrayApp(
             }
         }
     }
+}
+
+private fun cancelOrderAndNavigateToStart(
+    viewModel: OrderViewModel,
+    navController: NavHostController
+) {
+    viewModel.resetOrder()
+    navController.popBackStack(LunchTrayScreen.Start.name, inclusive = false)
 }
