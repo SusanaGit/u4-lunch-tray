@@ -22,7 +22,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -60,19 +64,32 @@ enum class LunchTrayScreen(@StringRes val title: Int) {
 @Composable
 fun LunchTrayAppBar(
     currentScreen: LunchTrayScreen,
+    canNavigateBack: Boolean,
+    navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
         modifier = modifier,
         title = {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             ) {
+                if (canNavigateBack) {
+                    IconButton(
+                        onClick = navigateUp,
+                        modifier = Modifier.align(Alignment.CenterStart)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(
+                                R.string.back_button
+                            )
+                        )
+                    }
+                }
                 Text(
                     text = stringResource(currentScreen.title),
-                    modifier = Modifier
-                        .align(Alignment.Center)
+                    modifier = Modifier.align(Alignment.Center)
                 )
             }
         }
@@ -95,7 +112,13 @@ fun LunchTrayApp(
 
     Scaffold(
         topBar = {
-            LunchTrayAppBar(currentScreen = currentScreen)
+            LunchTrayAppBar(
+                currentScreen = currentScreen,
+                canNavigateBack = navController.previousBackStackEntry != null,
+                navigateUp = {
+                    navController.navigateUp()
+                }
+            )
         }
     ) { innerPadding ->
         val uiState by viewModel.uiState.collectAsState()
