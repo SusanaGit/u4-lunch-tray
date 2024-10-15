@@ -183,7 +183,7 @@ fun LunchTrayApp(
                 CheckoutScreen(
                     orderUiState = OrderUiState(),
                     onNextButtonClicked = {
-                        navController.navigate(LunchTrayScreen.CheckOut.name)
+                        navController.navigate(LunchTrayScreen.Start.name)
                     },
                     onCancelButtonClicked = { /*TODO*/ },
                     modifier = Modifier
