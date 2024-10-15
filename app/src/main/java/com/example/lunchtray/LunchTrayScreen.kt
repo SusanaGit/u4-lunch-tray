@@ -27,6 +27,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lunchtray.ui.OrderViewModel
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 
 enum class LunchTrayScreen(@StringRes val title: Int) {
     Start(title = R.string.start_order),
@@ -48,8 +51,14 @@ fun LunchTrayAppBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LunchTrayApp() {
-    // TODO: Create Controller and initialization
+fun LunchTrayApp(
+    navController: NavHostController = rememberNavController()
+) {
+    val backStackEntry by navController.currentBackStackEntryAsState()
+
+    val currentScreen = LunchTrayScreen.valueOf(
+        backStackEntry?.destination?.route?: LunchTrayScreen.Start.name
+    )
 
     // Create ViewModel
     val viewModel: OrderViewModel = viewModel()
