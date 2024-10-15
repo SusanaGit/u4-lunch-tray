@@ -44,7 +44,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.lunchtray.datasource.DataSource
-import com.example.lunchtray.model.OrderUiState
 import com.example.lunchtray.ui.AccompanimentMenuScreen
 import com.example.lunchtray.ui.CheckoutScreen
 import com.example.lunchtray.ui.EntreeMenuScreen
@@ -149,7 +148,9 @@ fun LunchTrayApp(
                     onNextButtonClicked = {
                         navController.navigate(LunchTrayScreen.DishMenu.name)
                     },
-                    onSelectionChanged = {},
+                    onSelectionChanged = { item ->
+                        viewModel.updateEntree(item)
+                    },
                     modifier = Modifier
                         .verticalScroll(rememberScrollState())
                         .padding(innerPadding)
@@ -168,7 +169,9 @@ fun LunchTrayApp(
                     onNextButtonClicked = { 
                         navController.navigate(LunchTrayScreen.Accompaniment.name)
                     },
-                    onSelectionChanged = {},
+                    onSelectionChanged = { item ->
+                        viewModel.updateSideDish(item)
+                    },
                     modifier = Modifier
                         .verticalScroll(rememberScrollState())
                         .padding(innerPadding)
@@ -187,7 +190,9 @@ fun LunchTrayApp(
                     onNextButtonClicked = { 
                         navController.navigate(LunchTrayScreen.CheckOut.name)
                     },
-                    onSelectionChanged = {},
+                    onSelectionChanged = { item ->
+                        viewModel.updateAccompaniment(item)
+                    },
                     modifier = Modifier
                         .verticalScroll(rememberScrollState())
                         .padding(innerPadding)
@@ -196,9 +201,12 @@ fun LunchTrayApp(
 
             composable(route = LunchTrayScreen.CheckOut.name) {
                 CheckoutScreen(
-                    orderUiState = OrderUiState(),
+                    orderUiState = uiState,
                     onNextButtonClicked = {
-                        navController.navigate(LunchTrayScreen.Start.name)
+                        cancelOrderAndNavigateToStart(
+                            viewModel = viewModel,
+                            navController = navController
+                        )
                     },
                     onCancelButtonClicked = {
                         cancelOrderAndNavigateToStart(
